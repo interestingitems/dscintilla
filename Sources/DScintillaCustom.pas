@@ -71,6 +71,7 @@ type
     FDirectPointer: Pointer;
     FDirectFunction: TDScintillaFunction;
     FAccessMethod: TDScintillaMethod;
+    FNativeThreadId: DWORD;
 
     FStoredWnd: TDScintillaWnd;
 
@@ -324,6 +325,9 @@ begin
     WindowHandle, SCI_GETDIRECTFUNCTION, 0, 0));
   FDirectPointer := Pointer(Windows.SendMessage(
     WindowHandle, SCI_GETDIRECTPOINTER, 0, 0));
+
+  // Save the current thread ID
+  FNativeThreadId := Windows.GetCurrentThreadId();
 end;
 
 procedure TDScintillaCustom.WMDestroy(var AMessage: TWMDestroy);
@@ -438,6 +442,36 @@ function TDScintillaCustom.SendEditor(AMessage: UINT; WParam: WPARAM; LParam: LP
 begin
   HandleNeeded;
 
+{ See... http://www.scintilla.org/ScintillaDoc.html#DirectAccess
+
+  Per Documentation direct function is used for speed...
+
+    "On Windows, the message-passing scheme used to communicate between the container
+     and Scintilla is mediated by the operating system SendMessage function and can
+     lead to bad performance when calling intensively. To avoid this overhead, Scintilla
+     provides messages that allow you to call the Scintilla message function directly."
+
+  Also per documentation, SendMessage should be used when called from different thread...
+
+    "While faster, this direct calling will cause problems if performed from a different
+     thread to the native thread of the Scintilla window in which case
+     SendMessage(hSciWnd, SCI_*, wParam, lParam) should be used to synchronize with the
+     window's thread."
+
+  Use SendMessage() when we have too. This is a slight adaptation of the original code which
+  is commented out below. }
+
+  if (FAccessMethod = smWindows) or
+    (not Assigned(FDirectFunction)) or
+    (not Assigned(FDirectPointer)) or
+    (Windows.GetCurrentThreadId() <> FNativeThreadId) then
+  begin
+    Result := Windows.SendMessage(Self.Handle, AMessage, WParam, LParam);
+  end
+  else
+    Result := FDirectFunction(FDirectPointer, AMessage, WParam, LParam);
+
+
   // Below comment should be no longer valid as of r51
   { There are cases when the handle has been allocated but the direct pointer has
     not yet been set, because a call to SendEditor ends up in here during the
@@ -446,10 +480,10 @@ begin
 
     call in TDScintillaCustom.CreateWnd. For those cases, ignore the specified
     access method and always use smWindows. }
-  if (FAccessMethod = smWindows) or not Assigned(FDirectFunction) or not Assigned(FDirectPointer) then
-    Result := Windows.SendMessage(Self.Handle, AMessage, WParam, LParam)
-  else
-    Result := FDirectFunction(FDirectPointer, AMessage, WParam, LParam);
+//  if (FAccessMethod = smWindows) or not Assigned(FDirectFunction) or not Assigned(FDirectPointer) then
+//    Result := Windows.SendMessage(Self.Handle, AMessage, WParam, LParam)
+//  else
+//    Result := FDirectFunction(FDirectPointer, AMessage, WParam, LParam);
 end;
 
 end.
