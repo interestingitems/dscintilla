@@ -326,11 +326,11 @@ begin
   if SendEditor(SCI_GETCODEPAGE) = SC_CP_UTF8 then
   begin
     lRange.lpstrText := PAnsiChar(UnicodeStringToUTF8(AText));
-    Result := SendEditor(SCI_FINDTEXT, AFlags, Integer(@lRange));
+    Result := SendEditor(SCI_FINDTEXT, AFlags, NativeInt(@lRange));
   end else
   begin
     lRange.lpstrText := PAnsiChar(AnsiString(AText));
-    Result := SendEditor(SCI_FINDTEXT, AFlags, Integer(@lRange));
+    Result := SendEditor(SCI_FINDTEXT, AFlags, NativeInt(@lRange));
   end;
 
   if Result > INVALID_POSITION then
@@ -1407,12 +1407,12 @@ end;
 
 procedure TDScintilla.MarkerDefineRGBAImage(AMarkerNumber: Integer; APixels: PAnsiChar);
 begin
-  SendEditor(SCI_MARKERDEFINERGBAIMAGE, AMarkerNumber, Integer(APixels));
+  SendEditor(SCI_MARKERDEFINERGBAIMAGE, AMarkerNumber, NativeInt(APixels));
 end;
 
 procedure TDScintilla.RegisterRGBAImage(AType: Integer; APixels: PAnsiChar);
 begin
-  SendEditor(SCI_REGISTERRGBAIMAGE, AType, Integer(APixels));
+  SendEditor(SCI_REGISTERRGBAIMAGE, AType, NativeInt(APixels));
 end;
 
 procedure TDScintilla.ScrollToStart;
