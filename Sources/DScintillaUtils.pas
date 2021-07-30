@@ -86,8 +86,8 @@ type
   public
     constructor Create(ASendEditor: TDSciSendEditor);
 
-    function SendEditor(AMessage: Integer;
-      WParam: NativeInt = 0; LParam: NativeInt = 0): NativeInt;
+    function SendEditor(AMessage: UINT;
+      WParam: WPARAM = 0; LParam: LPARAM = 0): LRESULT;
 
     function IsUTF8: Boolean;
 
@@ -109,7 +109,7 @@ type
 
   TDSciLines = class(TDSciUnicodeStrings)
   protected
-    FHelper: TDSciHelper;   
+    FHelper: TDSciHelper;
 {$IFDEF DSCI_JCLWIDESTRINGS}
     FLastGetP: UnicodeString;
 {$ENDIF}
@@ -236,7 +236,7 @@ begin
   inherited Create;
 end;
 
-function TDSciHelper.SendEditor(AMessage: Integer; WParam: NativeInt; LParam: NativeInt): NativeInt;
+function TDSciHelper.SendEditor(AMessage: UINT; WParam: WPARAM; LParam: LPARAM): LRESULT;
 begin
   Result := FSendEditor(AMessage, WParam, LParam);
 end;

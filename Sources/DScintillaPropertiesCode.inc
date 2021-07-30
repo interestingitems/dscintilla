@@ -1011,7 +1011,7 @@ end;
 procedure TDScintilla.SetDocPointer(APointer: TDSciDocument);
 begin
   if APointer <> nil then
-    SendEditor(SCI_SETDOCPOINTER, 0, Integer(APointer));
+    SendEditor(SCI_SETDOCPOINTER, 0, NativeInt(APointer));
 end;
 
 procedure TDScintilla.SetModEventMask(AMask: Integer);
@@ -1019,12 +1019,12 @@ begin
   SendEditor(SCI_SETMODEVENTMASK, AMask, 0);
 end;
 
-function TDScintilla.GetEdgeColumn: Integer;
+function TDScintilla.GetEdgeColumn: NativeInt;
 begin
   Result := SendEditor(SCI_GETEDGECOLUMN, 0, 0);
 end;
 
-procedure TDScintilla.SetEdgeColumn(AColumn: Integer);
+procedure TDScintilla.SetEdgeColumn(AColumn: NativeInt);
 begin
   SendEditor(SCI_SETEDGECOLUMN, AColumn, 0);
 end;
@@ -1376,14 +1376,14 @@ end;
 
 procedure TDScintilla.MarginSetStyles(ALine: NativeInt; const AStyles: TDSciStyles);
 begin
-  SendEditor(SCI_MARGINSETSTYLES, ALine, Integer(AStyles));
+  SendEditor(SCI_MARGINSETSTYLES, ALine, NativeInt(AStyles));
 end;
 
 function TDScintilla.MarginGetStyles(ALine: NativeInt): TDSciStyles;
 begin
   SetLength(Result, SendEditor(SCI_MARGINGETSTYLES, ALine));
   if Length(Result) > 0 then
-    SendEditor(SCI_MARGINGETSTYLES, ALine, Integer(Result));
+    SendEditor(SCI_MARGINGETSTYLES, ALine, NativeInt(Result));
 end;
 
 procedure TDScintilla.MarginSetStyleOffset(AStyle: Integer);
@@ -1427,14 +1427,14 @@ end;
 
 procedure TDScintilla.AnnotationSetStyles(ALine: NativeInt; const AStyles: TDSciStyles);
 begin
-  SendEditor(SCI_ANNOTATIONSETSTYLES, ALine, Integer(AStyles));
+  SendEditor(SCI_ANNOTATIONSETSTYLES, ALine, NativeInt(AStyles));
 end;
 
 function TDScintilla.AnnotationGetStyles(ALine: NativeInt): TDSciStyles;
 begin
   SetLength(Result, SendEditor(SCI_ANNOTATIONGETSTYLES, ALine));
   if Length(Result) > 0 then
-    SendEditor(SCI_ANNOTATIONGETSTYLES, ALine, Integer(Result));
+    SendEditor(SCI_ANNOTATIONGETSTYLES, ALine, NativeInt(Result));
 end;
 
 function TDScintilla.AnnotationGetLines(ALine: NativeInt): Integer;
