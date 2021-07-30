@@ -5,7 +5,7 @@ end;
 
 procedure TDScintilla.AddStyledText(const ACells: TDSciCells);
 begin
-  SendEditor(SCI_ADDSTYLEDTEXT, System.Length(ACells) * 2, Integer(ACells));
+  SendEditor(SCI_ADDSTYLEDTEXT, System.Length(ACells) * 2, NativeInt(ACells));
 end;
 
 procedure TDScintilla.InsertText(APos: NativeInt; const AText: UnicodeString);
@@ -64,7 +64,7 @@ begin
   lRange.chrg.cpMax := AEnd;
   lRange.lpstrText := @Result[0];
 
-  SendEditor(SCI_GETSTYLEDTEXT, 0, Integer(@lRange));
+  SendEditor(SCI_GETSTYLEDTEXT, 0, NativeInt(@lRange));
 end;
 
 function TDScintilla.CanRedo: Boolean;
@@ -234,7 +234,7 @@ end;
 
 procedure TDScintilla.SetStylingEx(const AStyles: TDSciStyles);
 begin
-  SendEditor(SCI_SETSTYLINGEX, System.Length(AStyles), Integer(AStyles));
+  SendEditor(SCI_SETSTYLINGEX, System.Length(AStyles), NativeInt(AStyles));
 end;
 
 procedure TDScintilla.BeginUndoAction;
@@ -339,7 +339,7 @@ end;
 
 function TDScintilla.FormatRange(ADraw: Boolean; var AFr: TDSciRangeToFormat): NativeInt;
 begin
-  Result := SendEditor(SCI_FORMATRANGE, Integer(ADraw), Integer(@AFr));
+  Result := SendEditor(SCI_FORMATRANGE, Integer(ADraw), NativeInt(@AFr));
 end;
 
 function TDScintilla.GetLine(ALine: NativeInt): UnicodeString;
@@ -380,7 +380,7 @@ begin
   lRange.chrg.cpMax := AEnd;
   lRange.lpstrText := @lChars[0];
 
-  lActualLength := SendEditor(SCI_GETTEXTRANGE, 0, Integer(@lRange));
+  lActualLength := SendEditor(SCI_GETTEXTRANGE, 0, NativeInt(@lRange));
   lChars[lActualLength] := #0;
 
   Result := FHelper.GetStrFromPtr(@lChars[0]);
@@ -969,7 +969,7 @@ begin
   SendEditor(SCI_BRACEBADLIGHTINDICATOR, Integer(AUseBraceBadLightIndicator), AIndicator);
 end;
 
-function TDScintilla.BraceMatch(APos: NativeInt): Integer;
+function TDScintilla.BraceMatch(APos: NativeInt): NativeInt;
 begin
   Result := SendEditor(SCI_BRACEMATCH, APos, 0);
 end;
@@ -1012,13 +1012,13 @@ end;
 procedure TDScintilla.AddRefDocument(ADoc: TDSciDocument);
 begin
   if ADoc <>  nil then
-    SendEditor(SCI_ADDREFDOCUMENT, 0, Integer(ADoc));
+    SendEditor(SCI_ADDREFDOCUMENT, 0, NativeInt(ADoc));
 end;
 
 procedure TDScintilla.ReleaseDocument(ADoc: TDSciDocument);
 begin
   if ADoc <> nil then
-    SendEditor(SCI_RELEASEDOCUMENT, 0, Integer(ADoc));
+    SendEditor(SCI_RELEASEDOCUMENT, 0, NativeInt(ADoc));
 end;
 
 procedure TDScintilla.WordPartLeft;
@@ -1235,19 +1235,19 @@ begin
   SendEditor(SCI_ALLOCATE, ABytes, 0);
 end;
 
-// function TDScintilla.TargetAsUTF8(AS: PAnsiChar): Integer;
+// function TDScintilla.TargetAsUTF8(AS: PAnsiChar): NativeInt;
 // begin
-//   Result := SendEditor(SCI_TARGETASUTF8, 0, Integer(AS));
+//   Result := SendEditor(SCI_TARGETASUTF8, 0, NativeInt(AS));
 // end;
 
-// procedure TDScintilla.SetLengthForEncode(ABytes: Integer);
+// procedure TDScintilla.SetLengthForEncode(ABytes: NativeInt);
 // begin
 //   SendEditor(SCI_SETLENGTHFORENCODE, ABytes, 0);
 // end;
 
-// function TDScintilla.EncodedFromUTF8(AUtf8: PAnsiChar; AEncoded: PAnsiChar): Integer;
+// function TDScintilla.EncodedFromUTF8(AUtf8: PAnsiChar; AEncoded: PAnsiChar): NativeInt;
 // begin
-//   Result := SendEditor(SCI_ENCODEDFROMUTF8, Integer(AUtf8), Integer(AEncoded));
+//   Result := SendEditor(SCI_ENCODEDFROMUTF8, NativeInt(AUtf8), NativeInt(AEncoded));
 // end;
 
 function TDScintilla.FindColumn(ALine: NativeInt; AColumn: NativeInt): NativeInt;
@@ -1430,12 +1430,12 @@ begin
   Result := Pointer(SendEditor(SCI_CREATELOADER, ABytes, 0));
 end;
 
-// procedure TDScintilla.FindIndicatorShow(AStart: Integer; AEnd: Integer);
+// procedure TDScintilla.FindIndicatorShow(AStart: NativeInt; AEnd: NativeInt);
 // begin
 //   SendEditor(SCI_FINDINDICATORSHOW, AStart, AEnd);
 // end;
 
-// procedure TDScintilla.FindIndicatorFlash(AStart: Integer; AEnd: Integer);
+// procedure TDScintilla.FindIndicatorFlash(AStart: NativeInt; AEnd: NativeInt);
 // begin
 //   SendEditor(SCI_FINDINDICATORFLASH, AStart, AEnd);
 // end;
@@ -1457,7 +1457,7 @@ end;
 
 procedure TDScintilla.ClearRepresentation(AEncodedCharacter: AnsiString);
 begin
-  SendEditor(SCI_CLEARREPRESENTATION, Integer(FHelper.GetPtrFromAStr(AEncodedCharacter)), 0);
+  SendEditor(SCI_CLEARREPRESENTATION, NativeInt(FHelper.GetPtrFromAStr(AEncodedCharacter)), 0);
 end;
 
 procedure TDScintilla.StartRecord;
@@ -1508,7 +1508,7 @@ end;
 
 function TDScintilla.PrivateLexerCall(AOperation: Integer; APointer: Pointer): NativeInt;
 begin
-  Result := SendEditor(SCI_PRIVATELEXERCALL, AOperation, LPARAM(APointer));
+  Result := SendEditor(SCI_PRIVATELEXERCALL, AOperation, NativeInt(APointer));
 end;
 
 function TDScintilla.PropertyNames: UnicodeString;

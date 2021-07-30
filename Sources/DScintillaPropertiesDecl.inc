@@ -641,11 +641,11 @@
     procedure SetModEventMask(AMask: Integer);
 
     /// <summary>Retrieve the column number which text should be kept within.</summary>
-    function GetEdgeColumn: Integer;
+    function GetEdgeColumn: NativeInt;
 
     /// <summary>Set the column number of the edge.
     /// If text goes past the edge then it is highlighted.</summary>
-    procedure SetEdgeColumn(AColumn: Integer);
+    procedure SetEdgeColumn(AColumn: NativeInt);
 
     /// <summary>Retrieve the edge highlight mode.</summary>
     function GetEdgeMode: Integer;

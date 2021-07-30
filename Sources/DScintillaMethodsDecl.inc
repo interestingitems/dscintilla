@@ -576,7 +576,7 @@
     procedure BraceBadLightIndicator(AUseBraceBadLightIndicator: Boolean; AIndicator: Integer);
 
     /// <summary>Find the position of a matching brace or INVALID_POSITION if no match.</summary>
-    function BraceMatch(APos: NativeInt): Integer;
+    function BraceMatch(APos: NativeInt): NativeInt;
 
     /// <summary>Sets the current caret position to be the search anchor.</summary>
     procedure SearchAnchor;
